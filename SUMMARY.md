@@ -7,4 +7,6 @@
 * [install script](install-script.md)
 * [install docker-compose](install-docker-compose.md)
 * [delete k8s namespace](delete-k8s-namespace.md)
+* [regist data by consul istio1.7](regist-data-by-consul-istio1.7/README.md)
+  * [install istio](regist-data-by-consul-istio1.7/install-istio.md)
 

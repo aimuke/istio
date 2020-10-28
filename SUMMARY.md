@@ -1,6 +1,7 @@
 # Table of contents
 
 * [istio update](README.md)
+* [istiod](istiod.md)
 * [Pilot MCP](untitled.md)
 * [how to integrate data from consul](how-to-integrate-data-from-consul.md)
 * [install docker for centos](untitled-1.md)

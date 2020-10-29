@@ -1,6 +1,6 @@
 # istiod
 
-## kubectl get service istiod
+## service istiod
 
 ```text
 master $ kubectl get service istiod -n istio-system -o yaml
@@ -119,7 +119,7 @@ status:
   loadBalancer: {}
 ```
 
-## deployment
+## deployment istiod
 
 ```text
 master $ kubectl get deployments istiod  -n istio-system -o yaml
@@ -603,5 +603,118 @@ status:
   readyReplicas: 1
   replicas: 1
   updatedReplicas: 1
+```
+
+## ValidatingWebhookConfiguration
+
+```text
+controlplane $ kubectl get ValidatingWebhookConfiguration istiod-istio-system -o yaml
+apiVersion: admissionregistration.k8s.io/v1
+kind: ValidatingWebhookConfiguration
+metadata:
+  annotations:
+    kubectl.kubernetes.io/last-applied-configuration: |
+      {"apiVersion":"admissionregistration.k8s.io/v1beta1","kind":"ValidatingWebhookConfiguration","metadata":{"annotations":{},"labels":{"app":"istiod","install.operator.istio.io/owning-resource":"installed-state","install.operator.istio.io/owning-resource-namespace":"istio-system","istio":"istiod","istio.io/rev":"default","operator.istio.io/component":"Base","operator.istio.io/managed":"Reconcile","operator.istio.io/version":"1.7.4","release":"istio"},"name":"istiod-istio-system"},"webhooks":[{"admissionReviewVersions":["v1beta1","v1"],"clientConfig":{"caBundle":"","service":{"name":"istiod","namespace":"istio-system","path":"/validate"}},"failurePolicy":"Ignore","name":"validation.istio.io","rules":[{"apiGroups":["config.istio.io","security.istio.io","authentication.istio.io","networking.istio.io"],"apiVersions":["*"],"operations":["CREATE","UPDATE"],"resources":["*"]}],"sideEffects":"None"}]}
+  creationTimestamp: "2020-10-29T01:43:08Z"
+  generation: 3
+  labels:
+    app: istiod
+    install.operator.istio.io/owning-resource: installed-state
+    install.operator.istio.io/owning-resource-namespace: istio-system
+    istio: istiod
+    istio.io/rev: default
+    operator.istio.io/component: Base
+    operator.istio.io/managed: Reconcile
+    operator.istio.io/version: 1.7.4
+    release: istio
+  managedFields:
+  - apiVersion: admissionregistration.k8s.io/v1beta1
+    fieldsType: FieldsV1
+    fieldsV1:
+      f:metadata:
+        f:annotations:
+          .: {}
+          f:kubectl.kubernetes.io/last-applied-configuration: {}
+        f:labels:
+          .: {}
+          f:app: {}
+          f:install.operator.istio.io/owning-resource: {}
+          f:install.operator.istio.io/owning-resource-namespace: {}
+          f:istio: {}
+          f:istio.io/rev: {}
+          f:operator.istio.io/component: {}
+          f:operator.istio.io/managed: {}
+          f:operator.istio.io/version: {}
+          f:release: {}
+      f:webhooks:
+        .: {}
+        k:{"name":"validation.istio.io"}:
+          .: {}
+          f:admissionReviewVersions: {}
+          f:clientConfig:
+            .: {}
+            f:service:
+              .: {}
+              f:name: {}
+              f:namespace: {}
+              f:path: {}
+              f:port: {}
+          f:matchPolicy: {}
+          f:name: {}
+          f:namespaceSelector: {}
+          f:objectSelector: {}
+          f:rules: {}
+          f:sideEffects: {}
+          f:timeoutSeconds: {}
+    manager: istioctl
+    operation: Update
+    time: "2020-10-29T01:43:08Z"
+  - apiVersion: admissionregistration.k8s.io/v1beta1
+    fieldsType: FieldsV1
+    fieldsV1:
+      f:webhooks:
+        k:{"name":"validation.istio.io"}:
+          f:clientConfig:
+            f:caBundle: {}
+          f:failurePolicy: {}
+    manager: pilot-discovery
+    operation: Update
+    time: "2020-10-29T01:43:48Z"
+  name: istiod-istio-system
+  resourceVersion: "2783"
+  selfLink: /apis/admissionregistration.k8s.io/v1/validatingwebhookconfigurations/istiod-istio-system
+  uid: 9e4cc146-842a-46ac-a534-28c2c4fccbc4
+webhooks:
+- admissionReviewVersions:
+  - v1beta1
+  - v1
+  clientConfig:
+    caBundle: LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSUMzakNDQWNhZ0F3SUJBZ0lSQUx1UXJ1NU9Fa0J6bGF1ejd4aCttSFF3RFFZSktvWklodmNOQVFFTEJRQXcKR0RFV01CUUdBMVVFQ2hNTlkyeDFjM1JsY2k1c2IyTmhiREFlRncweU1ERXdNamt3TVRRek5EUmFGdzB6TURFdwpNamN3TVRRek5EUmFNQmd4RmpBVUJnTlZCQW9URFdOc2RYTjBaWEl1Ykc5allXd3dnZ0VpTUEwR0NTcUdTSWIzCkRRRUJBUVVBQTRJQkR3QXdnZ0VLQW9JQkFRREh2L1dQUzhIKzVJTGZqSHFYOUVTTUxwUUNCb09CNkFzU2dvbjYKdFdzVmJWZkNEQld2RWdwMWF5dXhPc3dESjlnU25RK1ovc0I1dW1uMUtGQnIrbUJhZ2IxdlVZUmxVcnZyakEzZgp6dTUzY1dYTnJoMVhEQ2FWcVVqUWxnSjVhWkhNZmVQbjZTaXo3Z05EdU9JVStNMG56cHB3NytLRTh5dG94RW8rCmx4TTcxRnRkZXh1QzJBK1Y1ZVRvaThkOHNXdFkyZkExVXB1L0huRjBwQ1FVcEt6Nk1Wbk5tdkVyd0t5TWpBRzcKazVSRmZmRUR1TWsxdlNwNzV0d0xoTlNTMEZqR2lJaVZFbmdGNERSVHYyR1RCK0ZGL3FMaDFEaklsMTBLTDdsNApEYWVybkxBdE1IbGlaS1hiN28rV0dJbFRURlNIZ3dwclFpTjR3WjJHb2UyRW1zMmJBZ01CQUFHakl6QWhNQTRHCkExVWREd0VCL3dRRUF3SUNCREFQQmdOVkhSTUJBZjhFQlRBREFRSC9NQTBHQ1NxR1NJYjNEUUVCQ3dVQUE0SUIKQVFBWE51ZUY2bHV3SEFzamdiV2wzRVg4UXBsN1kyRmpzaW1VVmdpTDYzUUdwNzlmUGtsa3RlQ0lZR0tUa1FEcwp0NUZSZktTdmdJWEpqSW9CeDVDSzhQUlBhRS9wMU5qVDJHaXp3cFpiL0p2b1RQZ0pwTjdXOWF6T3dLTzk4VkF0CmJCWWhUSGhSai8vM3M3YklRa0o1UEZ2SGlDQzZUWllNL1JOZnRMYkN6MjZyRndiSkI1TUhwT2huQ1FBZ25KZksKbVF4a1lZSDNKdjV4TUxrNngxdlJwcGJIVENrcWpSMjFrc0cyN0VBa011dUpXTWk3YzdqVkcwRFhDZEt1TUFtQgoreVBYeGUzM3VoeU50MmJjRWwxaUVBZXlBYWJORU9FcGZCcVBPSE1vOXpIYmxXU2xaL3J4N0VyTFhId2VsMWFJCmpVa2F0WTlxclJXbkMzTVZQR2gyZmFmUAotLS0tLUVORCBDRVJUSUZJQ0FURS0tLS0tCg==
+    service:
+      name: istiod
+      namespace: istio-system
+      path: /validate
+      port: 443
+  failurePolicy: Fail
+  matchPolicy: Exact
+  name: validation.istio.io
+  namespaceSelector: {}
+  objectSelector: {}
+  rules:
+  - apiGroups:
+    - config.istio.io
+    - security.istio.io
+    - authentication.istio.io
+    - networking.istio.io
+    apiVersions:
+    - '*'
+    operations:
+    - CREATE
+    - UPDATE
+    resources:
+    - '*'
+    scope: '*'
+  sideEffects: None
+  timeoutSeconds: 30
 ```
 

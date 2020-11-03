@@ -613,6 +613,14 @@ istiod 自签发证书 来自于
 /var/run/secrets/istio-dns/self-signed-root.pem
 ```
 
+其下面有三个文件
+
+```text
+cert-chain.pem 
+key.pem 
+self-signed-root.pem
+```
+
 webhook 中获取的CA就是使用自签发的根证书生成的
 
 ```text

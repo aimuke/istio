@@ -605,6 +605,20 @@ status:
   updatedReplicas: 1
 ```
 
+## CA
+
+istiod 自签发证书 来自于 
+
+```text
+/var/run/secrets/istio-dns/self-signed-root.pem
+```
+
+webhook 中获取的CA就是使用自签发的根证书生成的
+
+```text
+cat /var/run/secrets/istio-dns/self-signed-root.pem | base64
+```
+
 ## ValidatingWebhookConfiguration
 
 ```text

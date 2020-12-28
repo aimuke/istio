@@ -12,4 +12,5 @@
 * [sidecar 如何获取配置信息](how-to-set-config-info-for-sidecar.md)
 * [端口占用情况](ports-by-istio.md)
 * [虚拟监听器](virtual-listener.md)
+* [manual sidecar injection](manual-sidecar-injection.md)
 

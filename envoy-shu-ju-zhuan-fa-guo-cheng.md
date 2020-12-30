@@ -554,8 +554,6 @@ envoy 数据转发流程为：
 ]
 ```
 
-
-
 ### reviews.service.consul:9080
 
 ```text
@@ -717,8 +715,10 @@ envoy 数据转发流程为：
 }
 ```
 
-### inbound reviews
+### inbound/outbound reviews
 
+{% tabs %}
+{% tab title="inbound" %}
 ```text
 {
 	"version_info": "2020-12-30T06:07:44Z/1",
@@ -754,10 +754,10 @@ envoy 数据转发流程为：
 	"last_updated": "2020-12-30T06:07:47.783Z"
 }
 ```
+{% endtab %}
 
-### outbound reviews
-
-```text
+{% tab title="outbound" %}
+```
 {
 	"version_info": "2020-12-30T06:07:44Z/1",
 	"cluster": {
@@ -786,6 +786,8 @@ envoy 数据转发流程为：
 	"last_updated": "2020-12-30T06:07:47.779Z"
 }
 ```
+{% endtab %}
+{% endtabs %}
 
 ### outbound ratings
 
@@ -821,23 +823,11 @@ envoy 数据转发流程为：
 
 ## clusters
 
-### zipkin
+### static 通用
 
-```text
-zipkin::default_priority::max_connections::1024
-zipkin::default_priority::max_pending_requests::1024
-zipkin::default_priority::max_requests::1024
-zipkin::default_priority::max_retries::3
-zipkin::high_priority::max_connections::1024
-zipkin::high_priority::max_pending_requests::1024
-zipkin::high_priority::max_requests::1024
-zipkin::high_priority::max_retries::3
-zipkin::added_via_api::false
+{% tabs %}
+{% tab title="xds" %}
 ```
-
-### xds-grpc
-
-```text
 xds-grpc::default_priority::max_connections::100000
 xds-grpc::default_priority::max_pending_requests::100000
 xds-grpc::default_priority::max_requests::100000
@@ -866,75 +856,9 @@ xds-grpc::10.234.88.111:15010::priority::0
 xds-grpc::10.234.88.111:15010::success_rate::-1.0
 xds-grpc::10.234.88.111:15010::local_origin_success_rate::-1.0
 ```
+{% endtab %}
 
-### sds-grpc
-
-```text
-sds-grpc::default_priority::max_connections::1024
-sds-grpc::default_priority::max_pending_requests::1024
-sds-grpc::default_priority::max_requests::1024
-sds-grpc::default_priority::max_retries::3
-sds-grpc::high_priority::max_connections::1024
-sds-grpc::high_priority::max_pending_requests::1024
-sds-grpc::high_priority::max_requests::1024
-sds-grpc::high_priority::max_retries::3
-sds-grpc::added_via_api::false
-sds-grpc::./etc/istio/proxy/SDS::cx_active::0
-sds-grpc::./etc/istio/proxy/SDS::cx_connect_fail::0
-sds-grpc::./etc/istio/proxy/SDS::cx_total::0
-sds-grpc::./etc/istio/proxy/SDS::rq_active::0
-sds-grpc::./etc/istio/proxy/SDS::rq_error::0
-sds-grpc::./etc/istio/proxy/SDS::rq_success::0
-sds-grpc::./etc/istio/proxy/SDS::rq_timeout::0
-sds-grpc::./etc/istio/proxy/SDS::rq_total::0
-sds-grpc::./etc/istio/proxy/SDS::hostname::
-sds-grpc::./etc/istio/proxy/SDS::health_flags::healthy
-sds-grpc::./etc/istio/proxy/SDS::weight::1
-sds-grpc::./etc/istio/proxy/SDS::region::
-sds-grpc::./etc/istio/proxy/SDS::zone::
-sds-grpc::./etc/istio/proxy/SDS::sub_zone::
-sds-grpc::./etc/istio/proxy/SDS::canary::false
-sds-grpc::./etc/istio/proxy/SDS::priority::0
-sds-grpc::./etc/istio/proxy/SDS::success_rate::-1.0
-sds-grpc::./etc/istio/proxy/SDS::local_origin_success_rate::-1.0
-```
-
-### prometheus
-
-```text
-prometheus_stats::default_priority::max_connections::1024
-prometheus_stats::default_priority::max_pending_requests::1024
-prometheus_stats::default_priority::max_requests::1024
-prometheus_stats::default_priority::max_retries::3
-prometheus_stats::high_priority::max_connections::1024
-prometheus_stats::high_priority::max_pending_requests::1024
-prometheus_stats::high_priority::max_requests::1024
-prometheus_stats::high_priority::max_retries::3
-prometheus_stats::added_via_api::false
-prometheus_stats::127.0.0.1:15000::cx_active::0
-prometheus_stats::127.0.0.1:15000::cx_connect_fail::0
-prometheus_stats::127.0.0.1:15000::cx_total::0
-prometheus_stats::127.0.0.1:15000::rq_active::0
-prometheus_stats::127.0.0.1:15000::rq_error::0
-prometheus_stats::127.0.0.1:15000::rq_success::0
-prometheus_stats::127.0.0.1:15000::rq_timeout::0
-prometheus_stats::127.0.0.1:15000::rq_total::0
-prometheus_stats::127.0.0.1:15000::hostname::
-prometheus_stats::127.0.0.1:15000::health_flags::healthy
-prometheus_stats::127.0.0.1:15000::weight::1
-prometheus_stats::127.0.0.1:15000::region::
-prometheus_stats::127.0.0.1:15000::zone::
-prometheus_stats::127.0.0.1:15000::sub_zone::
-prometheus_stats::127.0.0.1:15000::canary::false
-prometheus_stats::127.0.0.1:15000::priority::0
-prometheus_stats::127.0.0.1:15000::success_rate::-1.0
-prometheus_stats::127.0.0.1:15000::local_origin_success_rate::-1.0
-```
-
-### 
-
-### BlackHoleCluster
-
+{% tab title="BlackHole" %}
 ```text
 BlackHoleCluster::default_priority::max_connections::1024
 BlackHoleCluster::default_priority::max_pending_requests::1024
@@ -946,10 +870,38 @@ BlackHoleCluster::high_priority::max_requests::1024
 BlackHoleCluster::high_priority::max_retries::3
 BlackHoleCluster::added_via_api::true
 ```
+{% endtab %}
 
-### agent
+{% tab title="Paasthrough" %}
+```
+PassthroughCluster::default_priority::max_connections::4294967295
+PassthroughCluster::default_priority::max_pending_requests::4294967295
+PassthroughCluster::default_priority::max_requests::4294967295
+PassthroughCluster::default_priority::max_retries::4294967295
+PassthroughCluster::high_priority::max_connections::1024
+PassthroughCluster::high_priority::max_pending_requests::1024
+PassthroughCluster::high_priority::max_requests::1024
+PassthroughCluster::high_priority::max_retries::3
+PassthroughCluster::added_via_api::true
+```
+{% endtab %}
 
-```text
+{% tab title="InboundPassthrough" %}
+```
+InboundPassthroughClusterIpv4::default_priority::max_connections::4294967295
+InboundPassthroughClusterIpv4::default_priority::max_pending_requests::4294967295
+InboundPassthroughClusterIpv4::default_priority::max_requests::4294967295
+InboundPassthroughClusterIpv4::default_priority::max_retries::4294967295
+InboundPassthroughClusterIpv4::high_priority::max_connections::1024
+InboundPassthroughClusterIpv4::high_priority::max_pending_requests::1024
+InboundPassthroughClusterIpv4::high_priority::max_requests::1024
+InboundPassthroughClusterIpv4::high_priority::max_retries::3
+InboundPassthroughClusterIpv4::added_via_api::true
+```
+{% endtab %}
+
+{% tab title="agent" %}
+```
 agent::default_priority::max_connections::1024
 agent::default_priority::max_pending_requests::1024
 agent::default_priority::max_requests::1024
@@ -978,34 +930,86 @@ agent::127.0.0.1:15020::priority::0
 agent::127.0.0.1:15020::success_rate::-1.0
 agent::127.0.0.1:15020::local_origin_success_rate::-1.0
 ```
+{% endtab %}
 
-### PassthroughCluster
-
-```text
-PassthroughCluster::default_priority::max_connections::4294967295
-PassthroughCluster::default_priority::max_pending_requests::4294967295
-PassthroughCluster::default_priority::max_requests::4294967295
-PassthroughCluster::default_priority::max_retries::4294967295
-PassthroughCluster::high_priority::max_connections::1024
-PassthroughCluster::high_priority::max_pending_requests::1024
-PassthroughCluster::high_priority::max_requests::1024
-PassthroughCluster::high_priority::max_retries::3
-PassthroughCluster::added_via_api::true
+{% tab title="sds" %}
 ```
-
-### InboundPassthroughClusterIpv4
-
-```text
-InboundPassthroughClusterIpv4::default_priority::max_connections::4294967295
-InboundPassthroughClusterIpv4::default_priority::max_pending_requests::4294967295
-InboundPassthroughClusterIpv4::default_priority::max_requests::4294967295
-InboundPassthroughClusterIpv4::default_priority::max_retries::4294967295
-InboundPassthroughClusterIpv4::high_priority::max_connections::1024
-InboundPassthroughClusterIpv4::high_priority::max_pending_requests::1024
-InboundPassthroughClusterIpv4::high_priority::max_requests::1024
-InboundPassthroughClusterIpv4::high_priority::max_retries::3
-InboundPassthroughClusterIpv4::added_via_api::true
+sds-grpc::default_priority::max_connections::1024
+sds-grpc::default_priority::max_pending_requests::1024
+sds-grpc::default_priority::max_requests::1024
+sds-grpc::default_priority::max_retries::3
+sds-grpc::high_priority::max_connections::1024
+sds-grpc::high_priority::max_pending_requests::1024
+sds-grpc::high_priority::max_requests::1024
+sds-grpc::high_priority::max_retries::3
+sds-grpc::added_via_api::false
+sds-grpc::./etc/istio/proxy/SDS::cx_active::0
+sds-grpc::./etc/istio/proxy/SDS::cx_connect_fail::0
+sds-grpc::./etc/istio/proxy/SDS::cx_total::0
+sds-grpc::./etc/istio/proxy/SDS::rq_active::0
+sds-grpc::./etc/istio/proxy/SDS::rq_error::0
+sds-grpc::./etc/istio/proxy/SDS::rq_success::0
+sds-grpc::./etc/istio/proxy/SDS::rq_timeout::0
+sds-grpc::./etc/istio/proxy/SDS::rq_total::0
+sds-grpc::./etc/istio/proxy/SDS::hostname::
+sds-grpc::./etc/istio/proxy/SDS::health_flags::healthy
+sds-grpc::./etc/istio/proxy/SDS::weight::1
+sds-grpc::./etc/istio/proxy/SDS::region::
+sds-grpc::./etc/istio/proxy/SDS::zone::
+sds-grpc::./etc/istio/proxy/SDS::sub_zone::
+sds-grpc::./etc/istio/proxy/SDS::canary::false
+sds-grpc::./etc/istio/proxy/SDS::priority::0
+sds-grpc::./etc/istio/proxy/SDS::success_rate::-1.0
+sds-grpc::./etc/istio/proxy/SDS::local_origin_success_rate::-1.0
 ```
+{% endtab %}
+
+{% tab title="prometheus" %}
+```
+prometheus_stats::default_priority::max_connections::1024
+prometheus_stats::default_priority::max_pending_requests::1024
+prometheus_stats::default_priority::max_requests::1024
+prometheus_stats::default_priority::max_retries::3
+prometheus_stats::high_priority::max_connections::1024
+prometheus_stats::high_priority::max_pending_requests::1024
+prometheus_stats::high_priority::max_requests::1024
+prometheus_stats::high_priority::max_retries::3
+prometheus_stats::added_via_api::false
+prometheus_stats::127.0.0.1:15000::cx_active::0
+prometheus_stats::127.0.0.1:15000::cx_connect_fail::0
+prometheus_stats::127.0.0.1:15000::cx_total::0
+prometheus_stats::127.0.0.1:15000::rq_active::0
+prometheus_stats::127.0.0.1:15000::rq_error::0
+prometheus_stats::127.0.0.1:15000::rq_success::0
+prometheus_stats::127.0.0.1:15000::rq_timeout::0
+prometheus_stats::127.0.0.1:15000::rq_total::0
+prometheus_stats::127.0.0.1:15000::hostname::
+prometheus_stats::127.0.0.1:15000::health_flags::healthy
+prometheus_stats::127.0.0.1:15000::weight::1
+prometheus_stats::127.0.0.1:15000::region::
+prometheus_stats::127.0.0.1:15000::zone::
+prometheus_stats::127.0.0.1:15000::sub_zone::
+prometheus_stats::127.0.0.1:15000::canary::false
+prometheus_stats::127.0.0.1:15000::priority::0
+prometheus_stats::127.0.0.1:15000::success_rate::-1.0
+prometheus_stats::127.0.0.1:15000::local_origin_success_rate::-1.0
+```
+{% endtab %}
+
+{% tab title="zipkin" %}
+```
+zipkin::default_priority::max_connections::1024
+zipkin::default_priority::max_pending_requests::1024
+zipkin::default_priority::max_requests::1024
+zipkin::default_priority::max_retries::3
+zipkin::high_priority::max_connections::1024
+zipkin::high_priority::max_pending_requests::1024
+zipkin::high_priority::max_requests::1024
+zipkin::high_priority::max_retries::3
+zipkin::added_via_api::false
+```
+{% endtab %}
+{% endtabs %}
 
 ### inbound/outbound reviews
 

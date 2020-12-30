@@ -644,8 +644,10 @@ envoy 数据转发流程为：
 ]
 ```
 
-### BlackHoleCluster
+### 通用配置
 
+{% tabs %}
+{% tab title="blackhole" %}
 ```text
 {
 	"version_info": "2020-12-30T06:07:44Z/1",
@@ -658,10 +660,35 @@ envoy 数据转发流程为：
 	"last_updated": "2020-12-30T06:07:47.782Z"
 }
 ```
+{% endtab %}
 
-### InboundPassthroughClusterIpv4
+{% tab title="passthrough" %}
+```
+{
+	"version_info": "2020-12-30T06:07:44Z/1",
+	"cluster": {
+		"@type": "type.googleapis.com/envoy.config.cluster.v3.Cluster",
+		"name": "PassthroughCluster",
+		"type": "ORIGINAL_DST",
+		"connect_timeout": "10s",
+		"lb_policy": "CLUSTER_PROVIDED",
+		"circuit_breakers": {
+			"thresholds": [{
+				"max_connections": 4294967295,
+				"max_pending_requests": 4294967295,
+				"max_requests": 4294967295,
+				"max_retries": 4294967295
+			}]
+		},
+		"protocol_selection": "USE_DOWNSTREAM_PROTOCOL"
+	},
+	"last_updated": "2020-12-30T06:07:47.783Z"
+}
+```
+{% endtab %}
 
-```text
+{% tab title="inboundpassthroughv4" %}
+```
 {
 	"version_info": "2020-12-30T06:07:44Z/1",
 	"cluster": {
@@ -689,31 +716,8 @@ envoy 数据转发流程为：
 	"last_updated": "2020-12-30T06:07:47.784Z"
 }
 ```
-
-### PassthroughCluster
-
-```text
-{
-	"version_info": "2020-12-30T06:07:44Z/1",
-	"cluster": {
-		"@type": "type.googleapis.com/envoy.config.cluster.v3.Cluster",
-		"name": "PassthroughCluster",
-		"type": "ORIGINAL_DST",
-		"connect_timeout": "10s",
-		"lb_policy": "CLUSTER_PROVIDED",
-		"circuit_breakers": {
-			"thresholds": [{
-				"max_connections": 4294967295,
-				"max_pending_requests": 4294967295,
-				"max_requests": 4294967295,
-				"max_retries": 4294967295
-			}]
-		},
-		"protocol_selection": "USE_DOWNSTREAM_PROTOCOL"
-	},
-	"last_updated": "2020-12-30T06:07:47.783Z"
-}
-```
+{% endtab %}
+{% endtabs %}
 
 ### inbound/outbound reviews
 

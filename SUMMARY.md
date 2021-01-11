@@ -1,6 +1,7 @@
 # Table of contents
 
 * [istio update](README.md)
+* [data plane](data-plane.md)
 * [istiod](istiod.md)
 * [Pilot MCP](untitled.md)
 * [how to integrate data from consul](how-to-integrate-data-from-consul.md)

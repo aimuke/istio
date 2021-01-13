@@ -22,7 +22,30 @@
 
 遍历所有ip，存在任意一个ip为 v6 版本，就认为ipv6 可用。
 
+## 双栈时非默认栈流量被丢弃
 
+**问题**
+
+双栈时，v4和v6的流量都会被转发到 15001或15006 端口。但是15001 和 15006 都只监听在了一个ip栈 上。
+
+假如当前的主用栈为 ipv6，那么15006 只监听在了ipv6 地址上。这时候一个ipv4 地址的请求到来，入向流量被转发到 15006 端口。但是 envoy 没有在 ipv4 的地址上监听15006. 就会导致流量丢失。
+
+出向流量同理。
+
+**解决**
+
+当节点为双栈时，需要设置为监听在 ipv6，同时兼容 ipv4
+
+```text
+"name": "virtualInbound",
+ "address": {
+  "socket_address": {
+   "address": "0.0.0.0",
+   "port_value": 15006,
+   "ipv4_compat": true
+  }
+ },
+```
 
 ## 双栈时未注册的非默认栈流量被抛弃
 
@@ -34,7 +57,7 @@
 
 **解决方式**
 
-在双栈时，同时添加 ipv4的passthrough和 ipv6 的passthrough
+在双栈时，同时添加 ipv4的passthrough和 ipv6 的**passthrough**
 
 ## 双栈时pilot 域名无法访问
 
@@ -46,7 +69,11 @@
 
 **解决方式**
 
-在pilot-agent 生成envoy 的静态配置数据的时候，判断是否含有IPV6，如果含有，则应该设置dns解析为同时获取 V4和V6（ "dns\_lookup\_family": “AUTO”）.
+在pilot-agent 生成envoy 的静态配置数据的时候，判断是否含有IPV6，如果含有，则应该设置dns解析为同时获取 V4和V6（ **"dns\_lookup\_family": “AUTO”**）.
+
+```text
+"dns_lookup_family": "V4_ONLY",  // AUTO
+```
 
 ## Consul 数据中获取服务命名空间处理
 

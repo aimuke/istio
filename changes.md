@@ -24,27 +24,29 @@
 
 
 
-## 双栈时非默认栈流量被抛弃
+## 双栈时未注册的非默认栈流量被抛弃
 
 **问题**
 
-入向流量，在双栈ipv6场景下， 使用ipv4流量发送请求时，由于没有配置ipv4 的passthrough，所以ipv4 的流量会被丢弃。
+双栈环境下，加入pod 中同时有 svr1，svr2，分别监听**不同端口** 8080和8081，其中 svr1 向serviceregistry 进行了注册。但是 svr2 没有进行注册。 所以控制面下发的配置中。virtualInbound 中的 filter 中有 tcp 的paasthrough和 主用栈的passthrough，但是不会有非主用栈的passthrough。同时还有一个 8080 端口的filter。但是没有8081 端口的filter。
+
+这时候如果从外部使用 非主用栈ip 访问 svr2 的端口 8081。 iptable 会将流量导流到 15006 端口，然后依次跟经过filter。由于没有对应的 8081 端口匹配，所以只能走passthrough。但是envoy 中passthrough 配置了 原地址匹配，即分成了 ipv4 的passthrough和ipv6 的passthrough。此时由于没有非主用栈的passthrough。所以该流量会被丢弃。
 
 **解决方式**
 
 在双栈时，同时添加 ipv4的passthrough和 ipv6 的passthrough
 
-## 双栈时如果只注册一个栈另一个栈不可访问
+## 双栈时pilot 域名无法访问
 
 **问题**
 
-envoy 中根据域名获取IP时，分为了获取ipv6 地址和获取ipv4 地址，默认情况下，如果没有配置 ipv4 兼容，那么envoy 只会获取ipv4的地址。
+前提是 双栈时，如果pilot 只注册了ipv6 的服务地址
 
-在双栈时，如果应用只注册了 ipv6 地址，没有注册ipv4 地址， 这时候，envoy 只会去取ipv4 的地址，不会去取ipv6 的地址。由于没有注册ipv6 地址，所以此时域名将无法访问。
+这时由于envoy同时有 ipv4和ipv6 的地址，所以生成静态 cluster 时pilot 配置的  "dns\_lookup\_family": "V4\_ONLY", 即根据域名解析时，只向域名服务器获取IPV4 的地址。由于只注册了IPV6的地址，所以域名解析器无法获取对应的IPV4地址。导致域名解析失败。
 
 **解决方式**
 
-在envoy 的listener 配置中添加 ipv4 兼容模式
+在pilot-agent 生成envoy 的静态配置数据的时候，判断是否含有IPV6，如果含有，则应该设置dns解析为同时获取 V4和V6（ "dns\_lookup\_family": “AUTO”）.
 
 ## Consul 数据中获取服务命名空间处理
 
